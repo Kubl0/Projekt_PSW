@@ -8,21 +8,21 @@ export default function UserEdit({ logout }) {
   const logged = useContext(loggedContext);
   const { id } = useParams();
   const [editMsg, setEditMsg] = React.useState("");
-  const [user, setUser] = React.useState({});
+  const [userData, setUserData] = React.useState({});
 
   React.useEffect(() => {
     fetch(`http://localhost:5000/getuser/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        setUser(data);
+        setUserData(data);
       });
   }, [id]);
-
+  //eslint-disable-next-line
   const formik = useFormik({
     initialValues: {
-      username: user.username,
-      email: user.email,
-      password: user.password,
+      username: "",
+      email: "",
+      password: "",
     },
     onSubmit: (values) => {
       fetch(`http://localhost:5000/updateuser/${id}`, {
@@ -31,14 +31,13 @@ export default function UserEdit({ logout }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: values.username ? values.username : user.username,
-          email: values.email ? values.email : user.email,
-          password: values.password ? values.password : user.password,
+          username: values.username ? values.username : userData.username,
+          email: values.email ? values.email : userData.email,
+          password: values.password ? values.password : userData.password,
         }),
       }).then((res) => {
         if (res.status === 200) {
           setEditMsg("User edited successfully");
-          logout();
         } else {
           setEditMsg("User edit failed");
         }
@@ -60,7 +59,7 @@ export default function UserEdit({ logout }) {
             value={formik.values.username}
           />
           <input
-            type="text"
+            type="email"
             name="email"
             placeholder="Email"
             onChange={formik.handleChange}
@@ -83,6 +82,7 @@ export default function UserEdit({ logout }) {
             }).then((res) => {
               if (res.status === 200) {
                 setEditMsg("User deleted successfully");
+                logged._id === id && logout();
               } else {
                 setEditMsg("User delete failed");
               }

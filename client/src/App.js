@@ -9,7 +9,6 @@ import NavBar from "./components/NavBar";
 import UserList from "./components/UserList";
 import UserDetails from "./components/UserDetails";
 import UserEdit from "./components/UserEdit";
-import { useParams } from "react-router-dom";
 
 export const loggedContext = createContext();
 
