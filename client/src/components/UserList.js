@@ -16,7 +16,7 @@ const UserList = () => {
   });
 
   React.useEffect(() => {
-    if (search == "") {
+    if (search === "") {
       fetch(`http://localhost:5000/getusers`, {
         method: "GET",
         headers: {

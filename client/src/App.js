@@ -9,6 +9,7 @@ import NavBar from "./components/NavBar";
 import UserList from "./components/UserList";
 import UserDetails from "./components/UserDetails";
 import UserEdit from "./components/UserEdit";
+import { useParams } from "react-router-dom";
 
 export const loggedContext = createContext();
 
@@ -30,10 +31,12 @@ function App() {
   }
 
   useEffect(() => {
-    if (user === null) {
+    let location = window.location.pathname;
+    if (user === null && location !== "/register") {
       navigate("/login");
     }
   }, [user, navigate]);
+
   return (
     <div className="App">
       <loggedContext.Provider value={user}>
