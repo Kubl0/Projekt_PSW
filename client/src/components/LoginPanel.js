@@ -17,7 +17,7 @@ const LoginPanel = ({ setUser }) => {
   const handleCookie = (user) => {
     //expiry in 5 minutes
     let time = new Date();
-    time.setMinutes(time.getMinutes() + 5);
+    time.setMinutes(time.getMinutes() + 20);
     setCookie("user", user, { path: "/", expires: time });
   };
 
@@ -80,7 +80,6 @@ const LoginPanel = ({ setUser }) => {
       <br />
       <br />
       <div>{loginMsg}</div>
-      <br />
       <Link to="/register">Register</Link>
     </form>
   );

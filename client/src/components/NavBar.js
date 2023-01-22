@@ -1,6 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import { loggedContext } from "../App";
+import { Link } from "react-router-dom";
 
 export default function NavBar({ logout }) {
   const logged = useContext(loggedContext);
@@ -20,6 +21,22 @@ export default function NavBar({ logout }) {
       {display && logged && (
         <div>
           <h2>Welcome {logged.username}</h2>
+          <button>
+            <Link to="/home">Home</Link>
+          </button>
+          &nbsp;
+          <button>
+            <Link to="/users">Users</Link>
+          </button>
+          &nbsp;
+          <button>
+            <Link to="/register">Register</Link>
+          </button>
+          &nbsp;
+          <button>
+            <Link to={`users/${logged._id}/details`}>Profile</Link>
+          </button>
+          &nbsp;
           <button onClick={logout}>Logout</button>
         </div>
       )}

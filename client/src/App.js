@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import LoginPanel from "./components/LoginPanel";
 import RegisterPanel from "./components/RegisterPanel";
@@ -6,6 +6,9 @@ import HomePage from "./components/HomePage";
 import { createContext } from "react";
 import { useCookies } from "react-cookie";
 import NavBar from "./components/NavBar";
+import UserList from "./components/UserList";
+import UserDetails from "./components/UserDetails";
+import UserEdit from "./components/UserEdit";
 
 export const loggedContext = createContext();
 
@@ -26,6 +29,11 @@ function App() {
     navigate("/login");
   }
 
+  useEffect(() => {
+    if (user === null) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
   return (
     <div className="App">
       <loggedContext.Provider value={user}>
@@ -37,6 +45,12 @@ function App() {
           <Route
             path="/home"
             element={user !== null ? <HomePage /> : <Navigate to="/login" />}
+          />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/users/:id/details" element={<UserDetails />} />
+          <Route
+            path="/users/:id/edit"
+            element={<UserEdit logout={logout} />}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

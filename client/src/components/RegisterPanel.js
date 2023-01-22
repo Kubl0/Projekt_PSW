@@ -57,6 +57,7 @@ const RegisterPanel = () => {
   });
   return (
     <form onSubmit={formik.handleSubmit}>
+      <br />
       <input
         id="email"
         name="email"
