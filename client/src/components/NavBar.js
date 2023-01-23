@@ -33,6 +33,10 @@ export default function NavBar({ logout }) {
             <Link to={`users/${logged._id}/details`}>Profile</Link>
           </button>
           &nbsp;
+          <button>
+            <Link to="mqtt">Chat</Link>
+          </button>
+          &nbsp;
           <button onClick={logout}>Logout</button>
         </div>
       )}

@@ -98,4 +98,31 @@ routes.route("/deleteuser/:id").delete(function (req, res) {
   res.json({ message: "User deleted" });
 });
 
+routes.route("/addchatmessage").post(function (req, res) {
+  let db_connect = dbo.getDb("mydb");
+  let myobj = {
+    user: req.body.user,
+    message: req.body.message,
+    timestamp: req.body.timestamp,
+    room: req.body.room,
+  };
+  db_connect.collection("chatmessages").insertOne(myobj, function (err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+  });
+  res.json({ message: "Chat message added successfully" });
+});
+
+routes.route("/getchathistory/:room").get(function (req, res) {
+  let db_connect = dbo.getDb("mydb");
+  let myquery = { room: req.params.room };
+  db_connect
+    .collection("chatmessages")
+    .find(myquery)
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
 module.exports = routes;

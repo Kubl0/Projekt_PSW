@@ -9,6 +9,8 @@ import NavBar from "./components/NavBar";
 import UserList from "./components/UserList";
 import UserDetails from "./components/UserDetails";
 import UserEdit from "./components/UserEdit";
+import MqttChat from "./components/MqttChat";
+import MqttChatHistory from "./components/MqttChatHistory";
 
 export const loggedContext = createContext();
 
@@ -16,7 +18,6 @@ function App() {
   const [user, setUser] = useState(null);
   //eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-
   const navigate = useNavigate();
 
   if (cookies.user !== undefined && user === null) {
@@ -54,6 +55,8 @@ function App() {
             path="/users/:id/edit"
             element={<UserEdit logout={logout} />}
           />
+          <Route path="/mqtt" element={<MqttChat user={user} />} />
+          <Route path="/chathistory/:id" element={<MqttChatHistory />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </loggedContext.Provider>
