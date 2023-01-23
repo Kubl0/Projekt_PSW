@@ -30,10 +30,6 @@ export default function NavBar({ logout }) {
           </button>
           &nbsp;
           <button>
-            <Link to="/register">Register</Link>
-          </button>
-          &nbsp;
-          <button>
             <Link to={`users/${logged._id}/details`}>Profile</Link>
           </button>
           &nbsp;

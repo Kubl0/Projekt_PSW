@@ -92,6 +92,7 @@ const RegisterPanel = () => {
       <br />
       <br />
       <div>{registerMsg}</div>
+      <br />
       <Link to="/login">Back to login</Link>
     </form>
   );
