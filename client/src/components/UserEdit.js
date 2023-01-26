@@ -46,10 +46,10 @@ export default function UserEdit({ logout }) {
     },
   });
 
-  if (logged && logged._id === id) {
+  if (logged && (logged._id === id || logged.type === "admin")) {
     return (
       <div>
-        <h1>Edit your profile</h1>
+        <h1>Edit profile</h1>
         <form onSubmit={formik.handleSubmit}>
           <input
             type="text"

@@ -43,6 +43,7 @@ const RegisterPanel = () => {
             username: values.username,
             password: values.password,
             email: values.email,
+            type: "user",
           }),
         }).then((res) => {
           if (res.status === 200) {

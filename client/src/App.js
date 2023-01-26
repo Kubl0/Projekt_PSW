@@ -11,7 +11,8 @@ import UserDetails from "./components/UserDetails";
 import UserEdit from "./components/UserEdit";
 import MqttChat from "./components/MqttChat";
 import MqttChatHistory from "./components/MqttChatHistory";
-
+import GameRoom from "./components/GameRoom";
+import Game from "./components/Game";
 export const loggedContext = createContext();
 
 function App() {
@@ -57,6 +58,8 @@ function App() {
           />
           <Route path="/mqtt" element={<MqttChat user={user} />} />
           <Route path="/chathistory/:id" element={<MqttChatHistory />} />
+          <Route path="/gameroom" element={<GameRoom />} />
+          <Route path="/gameroom/:id" element={<Game />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </loggedContext.Provider>

@@ -40,7 +40,7 @@ export default function UserDetails() {
           <br />
         </p>
       )}
-      {logged && logged._id === user._id && (
+      {logged && (logged._id === user._id || logged.type === "admin") && (
         <button>
           <Link to={`/users/${user._id}/edit`}>Edit your profile</Link>
         </button>

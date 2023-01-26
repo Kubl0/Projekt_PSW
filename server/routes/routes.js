@@ -2,6 +2,8 @@ const express = require("express");
 const routes = express.Router();
 const dbo = require("../db/conn");
 const ObjectId = require("mongodb").ObjectId;
+const mqtt = require("mqtt");
+const GameManager = require("../game");
 
 routes.route("/").get(function (req, res) {
   res.json({ message: "Hello World" });
@@ -123,6 +125,21 @@ routes.route("/getchathistory/:room").get(function (req, res) {
       if (err) throw err;
       res.json(result);
     });
+});
+
+routes.route(`/deletechathistory/:message_id`).delete(function (req, res) {
+  let db_connect = dbo.getDb("mydb");
+  let myquery = { _id: ObjectId(req.params.message_id) };
+
+  db_connect.collection("chatmessages").deleteOne(myquery, function (err, obj) {
+    if (err) throw err;
+    console.log("1 document deleted");
+  });
+});
+
+routes.route("/addgameroom").post(function (req, res) {
+  const gManager = new GameManager();
+  gManager.startGame(req.body.room);
 });
 
 module.exports = routes;

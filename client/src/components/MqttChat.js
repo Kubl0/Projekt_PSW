@@ -2,13 +2,17 @@ import React, { useEffect } from "react";
 import mqtt from "precompiled-mqtt";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
+import { loggedContext } from "../App.js";
+import { useContext } from "react";
 
-export default function MqttChat({ user }) {
+export default function MqttChat() {
+  const user = useContext(loggedContext);
   const [room, setRoom] = React.useState("");
   const [client, setClient] = React.useState(null);
   const [isConnected, setIsConnected] = React.useState(false);
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [actualChat, setActualChat] = React.useState([]);
+  const [id, setId] = React.useState(0);
 
   const formik1 = useFormik({
     initialValues: {
@@ -61,7 +65,11 @@ export default function MqttChat({ user }) {
 
     if (isSubscribed) {
       client.on("message", (topic, message) => {
-        setActualChat((prev) => [...prev, message.toString()]);
+        setActualChat((prev) => [
+          ...prev,
+          { id: id, message: message.toString() },
+        ]);
+        setId(id + 1);
       });
     }
 
@@ -71,8 +79,9 @@ export default function MqttChat({ user }) {
       client.end();
       setClient(null);
     };
-  }, [room, isConnected, isSubscribed]);
+  }, [room, isConnected, isSubscribed, id]);
 
+  if (user === null) return <h1>Log in to use chat</h1>;
   return (
     <div>
       <h1>MQTT CHAT</h1>
@@ -114,7 +123,20 @@ export default function MqttChat({ user }) {
             <div id="chat">
               <ul>
                 {actualChat.map((message) => {
-                  return <li key={Math.random()}>{message}</li>;
+                  return (
+                    <div key={message.id}>
+                      <li key={message.id}>{message.message}</li>
+                      <button
+                        onClick={() =>
+                          setActualChat(
+                            actualChat.filter((item) => item.id !== message.id)
+                          )
+                        }
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  );
                 })}
               </ul>
             </div>
