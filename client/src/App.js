@@ -13,6 +13,8 @@ import MqttChat from "./components/MqttChat";
 import MqttChatHistory from "./components/MqttChatHistory";
 import GameRoom from "./components/GameRoom";
 import Game from "./components/Game";
+import "./style.css";
+
 export const loggedContext = createContext();
 
 function App() {
