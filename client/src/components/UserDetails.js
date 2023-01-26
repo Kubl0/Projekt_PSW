@@ -29,21 +29,23 @@ export default function UserDetails() {
 
   return (
     <div>
-      <h1>User Details</h1>
+      <h1 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-90" >User Details</h1>
       {!loaded ? (
         <p>Loading...</p>
       ) : (
-        <p>
-          Username: {user.username}
-          <br />
-          Email: {user.email}
-          <br />
+        <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 -mt-6">
+        <p className="bg-gray-300 w-[60%] text-center p-5">
+        <p>Username: <br /> <p className="font-bold">{user.username}</p></p>
+        <p>Email:<br />   <p className="font-bold">{user.email}</p></p>
         </p>
+      </div>
       )}
       {logged && (logged._id === user._id || logged.type === "admin") && (
-        <button>
-          <Link to={`/users/${user._id}/edit`}>Edit your profile</Link>
-        </button>
+        <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 -mt-20">
+        <button className="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+          <Link to={`/users/${user._id}/edit`}>Edit profile</Link>
+        </button> 
+      </div>
       )}
     </div>
   );
