@@ -61,6 +61,7 @@ class GameManager {
   }
 
   gameLogic(room) {
+    let playerPosition = [0, 0];
     setTimeout(() => {
       this.client.publish(
         `game/${room}`,
@@ -70,6 +71,66 @@ class GameManager {
         })
       );
     }, 1000);
+
+    this.client.on("message", (topic, message) => {
+      const gameInfo = JSON.parse(message);
+      if (gameInfo.message === "Dice throw") {
+        let result = parseInt(Math.floor(Math.random() * 6) + 1);
+        if (playerPosition[gameInfo.player - 1] + result < 100) {
+          playerPosition[gameInfo.player - 1] += result;
+          //drabiny
+          if (playerPosition[gameInfo.player - 1] === 4)
+            playerPosition[gameInfo.player - 1] = 25;
+          if (playerPosition[gameInfo.player - 1] === 21)
+            playerPosition[gameInfo.player - 1] = 39;
+          if (playerPosition[gameInfo.player - 1] === 29)
+            playerPosition[gameInfo.player - 1] = 74;
+          if (playerPosition[gameInfo.player - 1] === 43)
+            playerPosition[gameInfo.player - 1] = 76;
+          if (playerPosition[gameInfo.player - 1] === 78)
+            playerPosition[gameInfo.player - 1] = 81;
+          if (playerPosition[gameInfo.player - 1] === 90)
+            playerPosition[gameInfo.player - 1] = 92;
+
+          //weze
+          if (playerPosition[gameInfo.player - 1] === 30)
+            playerPosition[gameInfo.player - 1] = 7;
+          if (playerPosition[gameInfo.player - 1] === 47)
+            playerPosition[gameInfo.player - 1] = 15;
+          if (playerPosition[gameInfo.player - 1] === 56)
+            playerPosition[gameInfo.player - 1] = 19;
+          if (playerPosition[gameInfo.player - 1] === 73)
+            playerPosition[gameInfo.player - 1] = 51;
+          if (playerPosition[gameInfo.player - 1] === 82)
+            playerPosition[gameInfo.player - 1] = 59;
+          if (playerPosition[gameInfo.player - 1] === 98)
+            playerPosition[gameInfo.player - 1] = 55;
+
+          console.log(playerPosition);
+          setTimeout(() => {
+            this.client.publish(
+              `game/${room}`,
+              JSON.stringify({
+                message: "Dice throw result",
+                player: gameInfo.player,
+                result: result,
+                position: playerPosition[gameInfo.player - 1],
+              })
+            );
+          }, 500);
+        }
+
+        if (playerPosition[gameInfo.player - 1] + result === 100) {
+          this.client.publish(
+            `game/${room}`,
+            JSON.stringify({
+              message: "Win",
+              player: gameInfo.player,
+            })
+          );
+        }
+      }
+    });
   }
 }
 

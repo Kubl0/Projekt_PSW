@@ -15,6 +15,14 @@ routes.route("/adduser").post(function (req, res) {
     username: req.body.username,
     password: req.body.password,
     email: req.body.email,
+    image: req.body.image,
+    gamesWon: 0,
+    gamesPlayed: 0,
+    type: "user",
+    profileDesc: "Nothing here yet...",
+    image:
+      "https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png",
+    type: "user",
   };
   db_connect.collection("users").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -78,7 +86,9 @@ routes.route("/updateuser/:id").post(function (req, res) {
     $set: {
       username: req.body.username,
       password: req.body.password,
+      profileDesc: req.body.profileDesc,
       email: req.body.email,
+      image: req.body.image,
     },
   };
   db_connect

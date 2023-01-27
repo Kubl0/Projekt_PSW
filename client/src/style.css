@@ -7,5 +7,20 @@
 }
 
 body{
-    background-color: #fffffa
+    background-color: #fffffa;
+    height: 100.001vh;
+}
+
+.emoji{
+    color: transparent;  
+  text-shadow: 0 0 0 rgb(75, 148, 231);
+}
+
+#chat::-webkit-scrollbar{
+    display: none;
+}
+
+#chat{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }

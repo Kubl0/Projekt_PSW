@@ -19,23 +19,40 @@ export default function NavBar({ logout }) {
   return (
     <>
       {display && logged && (
-        <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start bg-gray-800 p-3 pl-12 pr-12 rounded-b-xl">
-          <button className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium mr-3">
-            <Link to="/home">Home</Link>
-          </button>
-          <button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2  mr-3 rounded-md text-sm font-medium">
-            <Link to="/users">Users</Link>
-          </button>
-          <button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 mr-3 rounded-md text-sm font-medium">
-            <Link to={`users/${logged._id}/details`}>Profile</Link>
-          </button>
-          <button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2  mr-3 rounded-md text-sm font-medium">
-            <Link to="mqtt">Chat</Link>
-          </button>
+        <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start bg-gray-800 p-3 pl-12 pr-12">
+          <Link to="/home">
+            <button className="bg-gray-700 text-white px-3 h-8 mt-2 rounded-md text-sm font-medium mr-3">
+              Home
+            </button>
+          </Link>
+          <Link to="/users">
+            <button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 h-8 mt-2 mr-3 rounded-md text-sm font-medium">
+              Users
+            </button>
+          </Link>
+          <Link to="mqtt">
+            <button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 h-8 mt-2 mr-3 rounded-md text-sm font-medium">
+              Chat
+            </button>
+          </Link>
           <div className="flex grow"></div>
-          <h2 className="text-gray-300 font-medium mt-[5px] mr-5">Welcome {logged.username}</h2>
-          <button className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" 
-          onClick={logout}>Logout</button>
+          <Link to={`users/${logged._id}/details`}>
+            <button className="">
+              <h2 className="text-gray-300 font-medium mt-[5px] mr-5 flex flex-row">
+                <img
+                  src={logged.image}
+                  className="w-10 h-10 rounded-full"
+                  alt="..."
+                />{" "}
+              </h2>
+            </button>
+          </Link>
+          <button
+            className="bg-gray-700 text-white px-3 py-0 rounded-md text-sm font-medium h-8 mt-2"
+            onClick={logout}
+          >
+            Logout
+          </button>
         </div>
       )}
     </>
