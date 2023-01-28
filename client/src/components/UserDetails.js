@@ -119,7 +119,7 @@ export default function UserDetails() {
       )}
       {loaded && (
         <div className="flex flex-col items-center">
-          <div className=" w-[35%] bg-white rounded-lg border p-2 my-4 mx-6">
+          <div className=" w-[36%] bg-white rounded-lg p-2 my-4 mx-6 shadow-xl">
             <h3 className="font-bold">User comments</h3>
 
             <div className="flex flex-col">
