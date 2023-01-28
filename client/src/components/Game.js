@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import mqtt from "precompiled-mqtt";
 import { useParams } from "react-router-dom";
 import { loggedContext } from "../App";
 import { useContext } from "react";
-import gra_panel from "../assets/gra_panel.png";
 import swal from "sweetalert";
 import pawn1 from "../assets/pawn1.png";
 import pawn2 from "../assets/pawn2.png";
@@ -24,6 +23,7 @@ export default function Game() {
   const [startMsg, setStartMsg] = React.useState("Waiting for other player");
   const [yourTurn, setYourTurn] = React.useState(false);
   const [turnMsg, setTurnMsg] = React.useState("Wait for your turn");
+  //eslint-disable-next-line
   const [result, setResult] = React.useState(false);
 
   let table = Array(100);
@@ -74,6 +74,10 @@ export default function Game() {
         setActualGameInfo((prev) => [...prev, gameInfo]);
         if (gameInfo.message === "Both players joined, game starts") {
           setStarted(true);
+          fetch(`http://localhost:5000/addPlayedGame/${user._id}`, {
+            method: "POST",
+          });
+
           setStartMsg("Both players joined, game starts soon");
           setTimeout(() => {
             setStartMsg(null);
@@ -131,6 +135,9 @@ export default function Game() {
               button: "OK",
             });
             setResult(true);
+            fetch(`http://localhost:5000/addWonGame/${user._id}`, {
+              method: "POST",
+            });
           } else {
             swal({
               title: "You lost!",

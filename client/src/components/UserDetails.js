@@ -3,20 +3,41 @@ import { useParams } from "react-router-dom";
 import { loggedContext } from "../App";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import CommentList from "./CommentList";
 
 export default function UserDetails() {
   const logged = useContext(loggedContext);
 
   const { id } = useParams();
   const [loaded, setLoaded] = useState(false);
-  const [user, setUser] = useState(
-    fetch(`http://localhost:5000/getuser/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setLoaded(true);
-        return data;
-      })
-  );
+  const [user, setUser] = useState({});
+  const [update, setUpdate] = useState(false);
+  const [comments, setComments] = useState([]);
+
+  const formik = useFormik({
+    initialValues: {
+      name: user.name,
+      comment: "",
+    },
+    onSubmit: (values) => {
+      fetch(`http://localhost:5000/addComment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: logged._id,
+          name: logged.username,
+          userProfile: user._id,
+          comment: values.comment,
+          timestamp: Date.now(),
+        }),
+      });
+      formik.resetForm();
+      setUpdate(true);
+    },
+  });
 
   useEffect(() => {
     fetch(`http://localhost:5000/getuser/${id}`)
@@ -25,7 +46,15 @@ export default function UserDetails() {
         setLoaded(true);
         setUser(data);
       });
-  }, [id]);
+
+    fetch(`http://localhost:5000/getComments/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setComments(data);
+      });
+
+    setUpdate(false);
+  }, [id, update]);
 
   return (
     <div>
@@ -85,6 +114,37 @@ export default function UserDetails() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+      {loaded && (
+        <div className="flex flex-col items-center">
+          <div className=" w-[35%] bg-white rounded-lg border p-2 my-4 mx-6">
+            <h3 className="font-bold">User comments</h3>
+
+            <div className="flex flex-col">
+              <CommentList comments={comments} key={Math.random()} />
+            </div>
+            <form onSubmit={formik.handleSubmit}>
+              <div className="w-full px-3 my-2">
+                <textarea
+                  className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                  name="comment"
+                  required
+                  placeholder="Type Your Comment"
+                  onChange={formik.handleChange}
+                  value={formik.values.comment}
+                ></textarea>
+              </div>
+
+              <div className="w-full flex justify-end px-3">
+                <input
+                  type="submit"
+                  className="px-2.5 py-1.5 rounded-md text-white text-sm bg-indigo-500"
+                  value="Post Comment"
+                ></input>
+              </div>
+            </form>
           </div>
         </div>
       )}

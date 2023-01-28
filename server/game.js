@@ -157,6 +157,9 @@ class GameManager {
               })
             );
           }, 1000);
+
+          this.client.end();
+          rooms.filter((r) => r !== room);
         }
       }
     });
