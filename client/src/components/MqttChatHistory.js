@@ -33,11 +33,11 @@ export default function MqttChatHistory() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <h1 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-90">
         Chat History for "Room {id}"
       </h1>
-      <div>
+      <div className="w-[80%]">
         <ul
           className="ml-5 h-[600px] overflow-y-auto overflow-hidden flex-col-reverse bg-gray-800 rounded-xl mt-3 p-5 pb-2 pt-3 mr-5"
           id="chat"

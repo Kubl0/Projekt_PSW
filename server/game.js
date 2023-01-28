@@ -61,7 +61,7 @@ class GameManager {
   }
 
   gameLogic(room) {
-    let playerPosition = [0, 0];
+    let playerPosition = [1, 1];
     setTimeout(() => {
       this.client.publish(
         `game/${room}`,
@@ -120,14 +120,43 @@ class GameManager {
           }, 500);
         }
 
+        if (playerPosition[gameInfo.player - 1] + result > 100) {
+          setTimeout(() => {
+            this.client.publish(
+              `game/${room}`,
+              JSON.stringify({
+                message: "Dice throw result",
+                player: gameInfo.player,
+                result: result,
+                position: playerPosition[gameInfo.player - 1],
+              })
+            );
+          }, 500);
+        }
+
         if (playerPosition[gameInfo.player - 1] + result === 100) {
-          this.client.publish(
-            `game/${room}`,
-            JSON.stringify({
-              message: "Win",
-              player: gameInfo.player,
-            })
-          );
+          setTimeout(() => {
+            this.client.publish(
+              `game/${room}`,
+              JSON.stringify({
+                message: "Dice throw result",
+                player: gameInfo.player,
+                result: result,
+                position: playerPosition[gameInfo.player - 1],
+              })
+            );
+          }, 500);
+          setTimeout(() => {
+            this.client.publish(
+              `game/${room}`,
+              JSON.stringify({
+                message: "Win",
+                player: gameInfo.player,
+                result: result,
+                position: playerPosition[gameInfo.player - 1],
+              })
+            );
+          }, 1000);
         }
       }
     });

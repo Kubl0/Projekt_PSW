@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        plansza: "url(/src/assets/gra_panel.png)",
+      },
+    },
   },
   plugins: [],
-}
+};
