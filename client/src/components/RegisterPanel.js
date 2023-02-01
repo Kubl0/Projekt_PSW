@@ -46,7 +46,11 @@ const RegisterPanel = () => {
           }),
         }).then((res) => {
           if (res.status === 200) {
-            setRegisterMsg("User registered successfully");
+            res.json().then((data) => {
+              setRegisterMsg("");
+              setRegisterMsg(data.message);
+              console.log(data.message);
+            });
           } else {
             setRegisterMsg("User registration failed");
           }

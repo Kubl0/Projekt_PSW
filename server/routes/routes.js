@@ -5,6 +5,8 @@ const ObjectId = require("mongodb").ObjectId;
 const mqtt = require("mqtt");
 const GameManager = require("../game");
 const fs = require("fs");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 var util = require("util");
 
@@ -18,26 +20,39 @@ console.log = function (d) {
 
 routes.route("/adduser").post(function (req, res) {
   let db_connect = dbo.getDb("mydb");
-  let myobj = {
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
-    image: req.body.image,
-    gamesWon: 0,
-    gamesPlayed: 0,
-    type: "user",
-    profileDesc: "Nothing here yet...",
-    image:
-      "https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png",
-    type: "user",
-    comments: [],
-  };
-  db_connect.collection("users").insertOne(myobj, function (err, res) {
-    if (err) throw err;
-    let now = new Date();
-    console.log(now + " 1 user registered, user: " + myobj.username + "");
-  });
-  res.json({ message: "User added successfully" });
+  db_connect
+    .collection("users")
+    .findOne({ username: req.body.username }, function (err, result) {
+      if (err) throw err;
+      if (result) {
+        res.json({ message: "Username already exists" });
+      } else {
+        bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+          let myobj = {
+            username: req.body.username,
+            password: hash,
+            email: req.body.email,
+            image: req.body.image,
+            gamesWon: 0,
+            gamesPlayed: 0,
+            type: "user",
+            profileDesc: "Nothing here yet...",
+            image:
+              "https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png",
+            type: "user",
+            comments: [],
+          };
+          db_connect.collection("users").insertOne(myobj, function (err, res) {
+            if (err) throw err;
+            let now = new Date();
+            console.log(
+              now + " 1 user registered, user: " + myobj.username + ""
+            );
+          });
+          res.json({ message: "User added successfully" });
+        });
+      }
+    });
 });
 
 routes.route("/getusers").get(function (req, res) {
@@ -81,19 +96,28 @@ routes.route("/login").post(function (req, res) {
   let db_connect = dbo.getDb("mydb");
   let myobj = {
     username: req.body.username,
-    password: req.body.password,
   };
   db_connect.collection("users").findOne(myobj, function (err, result) {
     if (err) throw err;
     if (result) {
-      res.json({ message: "Login successful", user: result });
+      bcrypt.compare(
+        req.body.password,
+        result.password,
+        function (err, isMatch) {
+          if (err) throw err;
+          if (isMatch) {
+            res.json({ message: "Login successful", user: result });
+            let now = new Date();
+            console.log(now + "User logged in, user: " + myobj.username + "");
+          } else {
+            res.json({ message: "Login failed" });
+          }
+        }
+      );
     } else {
       res.json({ message: "Login failed" });
     }
   });
-
-  let now = new Date();
-  console.log(now + "User logged in, user: " + myobj.username + "");
 });
 
 routes.route("/updateuser/:id").post(function (req, res) {
